@@ -4,6 +4,7 @@
   "description": "Practices exercises to \"Professor Frisbee's Mostly Adequate Guide to Functional Programming\"",
   "main": "chapter5.js",
   "dependencies": {
+    "accounting": "^0.4.1",
     "ramda": "^0.26.1"
   },
   "devDependencies": {},

@@ -1,4 +1,3 @@
-/* jshint node: true */
 "use strict";
 const fp = require('lodash/fp');
 const _ = require('ramda');
@@ -92,6 +91,7 @@ var availablePrices = function(cars) {
     return accounting.formatMoney(x.dollar_value);
   }).join(', ');
 };
+
 
 var prettyValue = _.compose(accounting.formatMoney, _.prop("dollar_value"));
 var inStock = _.filter(_.prop('in_stock'));

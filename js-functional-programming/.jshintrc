@@ -1,0 +1,4 @@
+{
+    "extends": "/users/Mirek/.jshintrc",
+    "node": true
+}
