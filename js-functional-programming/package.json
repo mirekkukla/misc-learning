@@ -1,0 +1,15 @@
+{
+  "name": "js-functional-programming",
+  "version": "1.0.0",
+  "description": "Practices exercises to \"Professor Frisbee's Mostly Adequate Guide to Functional Programming\"",
+  "main": "chapter5.js",
+  "dependencies": {
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -93,7 +93,6 @@ var availablePrices = function(cars) {
   }).join(', ');
 };
 
-
 var prettyValue = _.compose(accounting.formatMoney, _.prop("dollar_value"));
 var inStock = _.filter(_.prop('in_stock'));
 availablePrices = _.compose(_.join(', '), _.map(prettyValue), inStock);
