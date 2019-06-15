@@ -19,6 +19,17 @@ function curry(fn) {
   };
 }
 
+// identity :: x -> x
+var identity = x => x;
+
+var either = curry(function(f, g, e) {
+  switch (e.constructor) {
+    case Left:
+      return f(e.__value);
+    case Right:
+      return g(e.__value);
+  }
+});
 
 // exported structures
 
@@ -154,10 +165,39 @@ class Maybe {
   }
 }
 
-// internal utils
+// The exercises use the simple in-chapter "Left" and "Right"
+// impementations, and don't work the fancy ones given in the "support" folder
 
-// identity :: x -> x
-var identity = x => x;
+var Left = function(x) {
+  this.__value = x;
+  // I added this
+  this[util.inspect.custom] = () => `Left(${inspect(this.__value)})`;
+};
+
+Left.of = function(x) {
+  return new Left(x);
+};
+
+Left.prototype.map = function(f) {
+  return this;
+};
+
+var Right = function(x) {
+  this.__value = x;
+  // I added this
+  this[util.inspect.custom] = () => `Right(${inspect(this.__value)})`;
+};
+
+Right.of = function(x) {
+  return new Right(x);
+};
+
+Right.prototype.map = function(f) {
+  return Right.of(f(this.__value));
+};
+
+
+// internal utils
 
 // compose :: ((a -> b), (b -> c),  ..., (y -> z)) -> a -> z
 var compose = (...fns) => (...args) => fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
@@ -193,4 +233,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, Task, Identity, Maybe};
+module.exports = {curry, identity, either, Task, Identity, Maybe, Left, Right};

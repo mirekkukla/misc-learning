@@ -3,9 +3,14 @@ var _ = require('ramda');
 var Structs = require('./structures.js');
 
 var curry = Structs.curry;
+var identity = Structs.identity;
+var either = Structs.either;
+
 var Task = Structs.Task;
 var Identity = Structs.Identity;
 var Maybe = Structs.Maybe;
+var Left = Structs.Left;
+var Right = Structs.Right;
 
 
 // Exercise 1
@@ -86,9 +91,11 @@ var getPost = function(i) {
   });
 };
 
-var ex5 = undefined;
+// Something is messed up with Task, but this should be right
+var ex5 = _.compose(_.toUpper, _.prop("title"), _.map, getPost);
 
-process.exit();
+console.log("\nExercise 5");
+// console.log(ex5(1)); // LOVE THEM FUTURES
 
 
 // Exercise 6
@@ -102,8 +109,11 @@ var checkActive = function(user) {
   return user.active ? Right.of(user) : Left.of('Your account is not active');
 };
 
-var ex6 = undefined;
+var ex6 = _.compose(either(identity, showWelcome), checkActive);
 
+console.log("\nExercise 6");
+console.log(ex6({name: "Bob", active: true})); // Welcome Bob
+console.log(ex6({name: "Andy"})); // Your account is not active
 
 
 // Exercise 7
@@ -112,9 +122,12 @@ var ex6 = undefined;
 // Right(x) if it is greater than 3 and Left("You need > 3") otherwise.
 
 var ex7 = function(x) {
-  return undefined; // <--- write me. (don't be pointfree)
+  return (x.length > 3 ? Right.of(x) : Left.of("You need > 3"));
 };
 
+console.log("\nExercise 7");
+console.log(ex7("sup dude")); // Right(sup dude)
+console.log(ex7("sup")); // Left("You need > 3")
 
 
 // Exercise 8
