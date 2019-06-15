@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('ramda');
 var util = require('util');
 
 // Data structures needed for exercises
@@ -196,6 +197,19 @@ Right.prototype.map = function(f) {
   return Right.of(f(this.__value));
 };
 
+var IO = function(f) {
+  this.__value = f;
+};
+
+IO.of = function(x) {
+  return new IO(function() {
+    return x;
+  });
+};
+
+IO.prototype.map = function(f) {
+  return new IO(_.compose(f, this.__value));
+};
 
 // internal utils
 
@@ -233,4 +247,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, identity, either, Task, Identity, Maybe, Left, Right};
+module.exports = {curry, identity, either, Task, Identity, Maybe, Left, Right, IO};

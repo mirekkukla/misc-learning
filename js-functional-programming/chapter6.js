@@ -11,6 +11,7 @@ var Identity = Structs.Identity;
 var Maybe = Structs.Maybe;
 var Left = Structs.Left;
 var Right = Structs.Right;
+var IO = Structs.IO;
 
 
 // Exercise 1
@@ -91,6 +92,7 @@ var getPost = function(i) {
   });
 };
 
+// SOLUTION
 // Something is messed up with Task, but this should be right
 var ex5 = _.compose(_.toUpper, _.prop("title"), _.map, getPost);
 
@@ -109,6 +111,7 @@ var checkActive = function(user) {
   return user.active ? Right.of(user) : Left.of('Your account is not active');
 };
 
+// SOLUTION
 var ex6 = _.compose(either(identity, showWelcome), checkActive);
 
 console.log("\nExercise 6");
@@ -121,6 +124,7 @@ console.log(ex6({name: "Andy"})); // Your account is not active
 // Write a validation function that checks for a length > 3. It should return
 // Right(x) if it is greater than 3 and Left("You need > 3") otherwise.
 
+// SOLUTION
 var ex7 = function(x) {
   return (x.length > 3 ? Right.of(x) : Left.of("You need > 3"));
 };
@@ -143,4 +147,9 @@ var save = function(x) {
   });
 };
 
-var ex8 = undefined;
+// SOLUTION
+var ex8 = (name) => either(identity, _.compose((io) => io.__value(), save), ex7(name));
+
+console.log("\nExercise 8");
+console.log(ex8("adam")); // SAVED USER! adam-saved
+console.log(ex8("bob")); // "You need > 3"
