@@ -93,12 +93,14 @@ var getPost = function(i) {
 };
 
 // SOLUTION
-// Something is messed up with Task, but this should be right
-var ex5 = _.compose(_.toUpper, _.prop("title"), _.map, getPost);
+var capitalTitle = _.compose(_.toUpper, _.prop("title"));
+var ex5 = _.compose(_.map(capitalTitle), getPost);
 
 console.log("\nExercise 5");
-// console.log(ex5(1)); // LOVE THEM FUTURES
-
+ex5(1).fork(
+  (error) => console.log("ERROR: " + error), // resolve fn
+  (result) => console.log("RESULT: " + result) // result fn
+  ); //RESULT: LOVE THEM FUTURES
 
 // Exercise 6
 // ==========
