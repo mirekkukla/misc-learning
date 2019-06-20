@@ -4,6 +4,9 @@ var Structs = require('./structures.js');
 
 var Maybe = Structs.Maybe;
 var IO = Structs.IO;
+var Task = Structs.Task;
+
+var identity = Structs.identity;
 var chain = Structs.chain;
 var map = Structs.map;
 
@@ -69,7 +72,6 @@ var ex2 = _.compose(
   );
 
 console.log(ex2().unsafePerformIO()); // chapter8.js \n logged chapter8.js
-process.exit();
 
 
 // Exercise 3
@@ -102,7 +104,16 @@ var getComments = function(i) {
 };
 
 
-var ex3 = undefined;
+// SOLUTION
+console.log("Exercise 3");
+var ex3 = _.compose(
+  map(console.log),
+  chain(getComments),
+  map(_.prop("id")),
+  getPost
+  );
+
+ex3(7).fork(identity, identity); // [{post_id: 7, body: 'This book should be illegal'}, <second item>]
 
 
 // Exercise 4
