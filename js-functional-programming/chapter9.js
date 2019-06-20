@@ -150,11 +150,10 @@ console.log("\nExercise 3");
 
 //  ex4 :: Email -> Either String (IO String)
 var ex4 = _.compose(
-  map(x => x.unsafePerformIO()),
   map(chain(emailBlast)),
   map(addToMailingList),
   validateEmail
   );
 
-console.log(ex4("blah")); // Left("invalid email")
-console.log(ex4("bob@dole.com")); // Right(emailed: bob@dole.com)
+console.log(either(identity, r => r.unsafePerformIO(), ex4("blah"))); // "invalid email"
+console.log(either(identity, r => r.unsafePerformIO(), ex4("bob@dole.com"))); // emailed: bob@dole.com
