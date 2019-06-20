@@ -8,7 +8,7 @@ var util = require('util');
 // exported utils
 
 // curry :: ((a, b, ...) -> c) -> a -> b -> ... -> c
-function curry(fn) {
+var curry = function(fn) {
   const arity = fn.length;
 
   return function $curry(...args) {
@@ -18,7 +18,7 @@ function curry(fn) {
 
     return fn.call(null, ...args);
   };
-}
+};
 
 // identity :: x -> x
 var identity = x => x;
@@ -30,6 +30,11 @@ var either = curry(function(f, g, e) {
     case Right:
       return g(e.__value);
   }
+});
+
+//  chain :: Monad m => (a -> m b) -> m a -> m b
+var chain = curry(function(f, m){
+  return m.map(f).join(); // or compose(join, map(f))(m)
 });
 
 // exported structures
@@ -247,4 +252,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, identity, either, Task, Identity, Maybe, Left, Right, IO};
+module.exports = {curry, identity, either, chain, Task, Identity, Maybe, Left, Right, IO};
