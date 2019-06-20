@@ -5,10 +5,13 @@ var Structs = require('./structures.js');
 var Maybe = Structs.Maybe;
 var IO = Structs.IO;
 var Task = Structs.Task;
+var Left = Structs.Left;
+var Right = Structs.Right;
 
 var identity = Structs.identity;
 var chain = Structs.chain;
 var map = Structs.map;
+var either = Structs.either;
 
 // Exercise 1
 // ==========
@@ -63,7 +66,7 @@ var pureLog = function(x) {
 };
 
 // SOLUTION
-console.log("Exercise 2");
+console.log("\nExercise 2");
 var ex2 = _.compose(
   chain(pureLog),
   map(_.last),
@@ -105,7 +108,7 @@ var getComments = function(i) {
 
 
 // SOLUTION
-console.log("Exercise 3");
+console.log("\nExercise 3");
 var ex3 = _.compose(
   map(console.log),
   chain(getComments),
@@ -141,5 +144,17 @@ var validateEmail = function(x) {
   return x.match(/\S+@\S+\.\S+/) ? (new Right(x)) : (new Left('invalid email'));
 };
 
+
+// SOLUTION
+console.log("\nExercise 3");
+
 //  ex4 :: Email -> Either String (IO String)
-var ex4 = undefined;
+var ex4 = _.compose(
+  map(x => x.unsafePerformIO()),
+  map(chain(emailBlast)),
+  map(addToMailingList),
+  validateEmail
+  );
+
+console.log(ex4("blah")); // Left("invalid email")
+console.log(ex4("bob@dole.com")); // Right(emailed: bob@dole.com)
