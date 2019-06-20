@@ -23,6 +23,10 @@ var curry = function(fn) {
 // identity :: x -> x
 var identity = x => x;
 
+// map :: Functor f => (a -> b) -> f a -> f b
+var map = curry((fn, f) => f.map(fn));
+
+// from chapter 7, NOT "index.js"
 var either = curry(function(f, g, e) {
   switch (e.constructor) {
     case Left:
@@ -36,6 +40,7 @@ var either = curry(function(f, g, e) {
 var chain = curry(function(f, m){
   return m.map(f).join(); // or compose(join, map(f))(m)
 });
+
 
 // exported structures
 
@@ -171,7 +176,41 @@ class Maybe {
   }
 }
 
-// The exercises use the simple in-chapter "Left" and "Right"
+class IO {
+  constructor(fn) {
+    this.unsafePerformIO = fn;
+  }
+
+  [util.inspect.custom]() {
+    return 'IO(?)';
+  }
+
+  // ----- Pointed IO
+  static of(x) {
+    return new IO(() => x);
+  }
+
+  // ----- Functor IO
+  map(fn) {
+    return new IO(compose(fn, this.unsafePerformIO));
+  }
+
+  // ----- Applicative IO
+  ap(f) {
+    return this.chain(fn => f.map(fn));
+  }
+
+  // ----- Monad IO
+  chain(fn) {
+    return this.map(fn).join();
+  }
+
+  join() {
+    return new IO(() => this.unsafePerformIO().unsafePerformIO());
+  }
+}
+
+// The chapter 7 exercises use the simple in-chapter "Left" and "Right"
 // impementations, and don't work the fancy ones given in the "support" folder
 
 var Left = function(x) {
@@ -200,20 +239,6 @@ Right.of = function(x) {
 
 Right.prototype.map = function(f) {
   return Right.of(f(this.__value));
-};
-
-var IO = function(f) {
-  this.__value = f;
-};
-
-IO.of = function(x) {
-  return new IO(function() {
-    return x;
-  });
-};
-
-IO.prototype.map = function(f) {
-  return new IO(_.compose(f, this.__value));
 };
 
 // internal utils
@@ -252,4 +277,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, identity, either, chain, Task, Identity, Maybe, Left, Right, IO};
+module.exports = {curry, identity, either, chain, map, Task, Identity, Maybe, Left, Right, IO};

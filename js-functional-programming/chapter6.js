@@ -150,7 +150,7 @@ var save = function(x) {
 };
 
 // SOLUTION
-var ex8 = (name) => either(identity, _.compose((io) => io.__value(), save), ex7(name));
+var ex8 = (name) => either(identity, _.compose((io) => io.unsafePerformIO(), save), ex7(name));
 
 console.log("\nExercise 8");
 console.log(ex8("adam")); // SAVED USER! adam-saved
