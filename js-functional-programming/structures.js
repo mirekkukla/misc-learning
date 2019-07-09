@@ -42,6 +42,9 @@ var chain = curry(function(f, m){
 });
 
 
+const liftA2 = curry((g, f1, f2) => f1.map(g).ap(f2));
+
+
 // exported structures
 
 class Identity {
@@ -277,4 +280,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, identity, either, chain, map, Task, Identity, Maybe, Left, Right, IO};
+module.exports = {curry, identity, either, chain, map, liftA2, Task, Identity, Maybe, Left, Right, IO};
