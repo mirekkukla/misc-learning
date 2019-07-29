@@ -244,6 +244,17 @@ Right.prototype.map = function(f) {
   return Right.of(f(this.__value));
 };
 
+class Either {
+  constructor(x) {
+    this.$value = x;
+  }
+
+  // ----- Pointed (Either a)
+  static of(x) {
+    return new Right(x);
+  }
+}
+
 // internal utils
 
 // compose :: ((a -> b), (b -> c),  ..., (y -> z)) -> a -> z
@@ -280,4 +291,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, identity, either, chain, map, liftA2, Task, Identity, Maybe, Left, Right, IO};
+module.exports = {curry, identity, either, chain, map, liftA2, Task, Identity, Maybe, Left, Right, IO, Either};
