@@ -5,6 +5,7 @@ var util = require('util');
 // Data structures needed for exercises
 // From https://github.com/MostlyAdequate/mostly-adequate-guide/blob/1c65a735a99cb66be6f502a6dd3dff0f66160490/support/index.js
 
+
 // exported utils
 
 // curry :: ((a, b, ...) -> c) -> a -> b -> ... -> c
@@ -41,8 +42,14 @@ var chain = curry(function(f, m){
   return m.map(f).join(); // or compose(join, map(f))(m)
 });
 
-
 const liftA2 = curry((g, f1, f2) => f1.map(g).ap(f2));
+
+// prop :: String -> Object -> a
+const prop = curry((p, obj) => obj[p]);
+
+
+// compose :: ((a -> b), (b -> c),  ..., (y -> z)) -> a -> z
+var compose = (...fns) => (...args) => fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
 
 
 // exported structures
@@ -244,21 +251,8 @@ Right.prototype.map = function(f) {
   return Right.of(f(this.__value));
 };
 
-class Either {
-  constructor(x) {
-    this.$value = x;
-  }
-
-  // ----- Pointed (Either a)
-  static of(x) {
-    return new Right(x);
-  }
-}
 
 // internal utils
-
-// compose :: ((a -> b), (b -> c),  ..., (y -> z)) -> a -> z
-var compose = (...fns) => (...args) => fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
 
 // inspect :: a -> String
 let inspect = (x) => {
@@ -291,4 +285,4 @@ let inspect = (x) => {
 };
 
 
-module.exports = {curry, identity, either, chain, map, liftA2, Task, Identity, Maybe, Left, Right, IO, Either};
+module.exports = {curry, identity, either, chain, map, liftA2, prop, compose, Task, Identity, Maybe, Left, Right, IO};
